@@ -1,0 +1,14 @@
+{
+  "name": "kibet-calculator",
+  "version": "1.0.0",
+  "description": "A small, responsive web-based calculator in plain JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -s . -l 3000",
+    "open": "npx serve -s . -l 3000 --single",
+    "test": "node calc-test.js"
+  },
+  "author": "kibet",
+  "license": "MIT",
+  "devDependencies": {}
+}

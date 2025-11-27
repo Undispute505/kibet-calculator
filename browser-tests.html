@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculator Browser Tests</title>
+  <style>
+    body{font-family: sans-serif; padding: 1rem;}
+    .ok{color:green}
+    .fail{color:red}
+    pre{background:#f7f7f7;padding:1rem;border-radius:6px}
+  </style>
+</head>
+<body>
+  <h1>Calculator Browser Tests</h1>
+  <div id="results">Running tests…</div>
+  <script src="script.js"></script>
+  <script>
+    const tests = [
+      {a:5, b:3, op: '+', expected:8},
+      {a:10, b:2, op: '/', expected:5},
+      {a:0.1, b:0.2, op: '+', expected:0.3},
+      {a:1.2345678912345, b:0.0000000000002, op: '+', expected:1.2345678912347},
+      {a:9, b:0, op: '/', expected:'Error'},
+      {a:2.5, b:3, op: '*', expected:7.5},
+      {a:10, b:7, op: '-', expected:3}
+    ];
+
+    const runTests = () => {
+      const results = [];
+      for(const t of tests){
+        const result = window.kibetCalc.calculate(t.a, t.b, t.op);
+        const ok = (typeof result === 'number' && typeof t.expected === 'number' && Math.abs(result - t.expected) < 1e-12)
+                 || result === t.expected;
+        results.push({ name:`${t.a} ${t.op} ${t.b}`, result, ok, expected: t.expected });
+      }
+      return results;
+    }
+
+    const mount = document.getElementById('results');
+    const results = runTests();
+    let passed = 0;
+    mount.innerHTML = '';
+    for(const r of results){
+      const el = document.createElement('div');
+      el.className = r.ok ? 'ok' : 'fail';
+      el.innerHTML = `<strong>${r.name}</strong> => ${r.result} ${r.ok ? 'OK':'FAIL, expected '+r.expected}`;
+      mount.appendChild(el);
+      if(r.ok) passed++;
+    }
+    const summary = document.createElement('p');
+    summary.innerHTML = `<strong>Passed ${passed}/${results.length} tests.</strong>`;
+    mount.appendChild(document.createElement('hr'));
+    mount.appendChild(summary);
+  </script>
+</body>
+</html>
